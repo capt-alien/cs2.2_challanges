@@ -80,28 +80,115 @@ class GraphTest(unittet.TestCase):
         assert graph.has_vertex('C') is True
         assert graph.size == 3
 
-       # when edge is added with existing vertices, second vertex should be a neighbor of first vertex
+       # when edge is added with existing vertices, second vertex
+       # should be a neighbor of first vertex
         graph.add_edge('A', 'B')
-        self.assertCountEqual(graph.get_neighbors('A'), ['B'])  # Item order does not matter
+        self.assertCountEqual(graph.get_neighbors('A'), ['B'])
         self.assertCountEqual(graph.get_neighbors('B'), [])
         graph.add_edge('A', 'C')
-        self.assertCountEqual(graph.get_neighbors('A'), ['B', 'C'])  # Item order does not matter
+        self.assertCountEqual(graph.get_neighbors('A'), ['B', 'C'])
         self.assertCountEqual(graph.get_neighbors('C'), [])
         graph.add_edge('B', 'C')
-        self.assertCountEqual(graph.get_neighbors('B'), ['C'])  # Item order does not matter
+        self.assertCountEqual(graph.get_neighbors('B'), ['C'])
         self.assertCountEqual(graph.get_neighbors('C'), [])
+
+        # when edge is added with nonexistent vertices, add nonexistent vertices
+        # then, second vertex should be a neighbor of first vertex
+        graph.add_edge('B', 'D')
+        self.assertCountEqual(graph.get_neighbors('B'), ['C', 'D'])
+        self.assertCountEqual(graph.get_neighbors('D'), [])
+        graph.add_edge('E', 'F')
+        self.assertCountEqual(graph.get_neighbors('E'), ['F'])
+        self.assertCountEqual(graph.get_neighbors('F'), [])
+
+        # when duplicate edge is added, the duplicate edge should be ignored
+        graph.add_edge('A', 'C')
+        self.assertCountEqual(graph.get_neighbors('A'), ['B', 'C'])
+        self.assertCountEqual(graph.get_neighbors('C'), [])
+        graph.add_edge('E', 'F')
+        self.assertCountEqual(graph.get_neighbors('E'), ['F'])
+        self.assertCountEqual(graph.get_neighbors('F'), [])
 
 
     def test_has_vertex(self):
         graph = Graph()
-        pass
+
+        # has_vertex should return false if vertex not in graph
+        # has_vertex should return true if vertex added through add_vertex
+        assert graph.has_vertex('A') is False
+        graph.add_vertex('A')
+        assert graph.has_vertex('A') is True
+        assert graph.has_vertex('B') is False
+        graph.add_vertex('B')
+        assert graph.has_vertex('B') is True
+        assert graph.has_vertex('C') is False
+        graph.add_vertex('C')
+        assert graph.has_vertex('C') is True
+
+        # has_vertex should return true if vertex added through add_edge
+        assert graph.has_vertex('D') is False
+        assert graph.has_vertex('E') is False
+        graph.add_edge('D', 'E')
+        assert graph.has_vertex('D') is True
+        assert graph.has_vertex('E') is True
 
 
     def test_get_vertices(self):
         graph = Graph()
-        pass
+
+        # get_vertices should return all vertices added by add_vertex
+        assert graph.has_vertex('A') is False
+        graph.add_vertex('A')
+        self.assertCountEqual(graph.get_vertices(), ['A'])
+        assert graph.has_vertex('B') is False
+        graph.add_vertex('B')
+        self.assertCountEqual(graph.get_vertices(), ['A', 'B'])
+        assert graph.has_vertex('C') is False
+        graph.add_vertex('C')
+        self.assertCountEqual(graph.get_vertices(), ['A', 'B', 'C'])
+
+        # get_vertices should return all vertices added by add_edge
+        assert graph.has_vertex('D') is False
+        assert graph.has_vertex('E') is False
+        graph.add_edge('D', 'E')
+        self.assertCountEqual(graph.get_vertices(), ['A', 'B', 'C', 'D', 'E'])
 
 
     def test_get_neighbors(self):
         graph = Graph()
-        pass
+
+        # neighbors should return all vertices that a given vertex directs to
+        # neighbors should not return any vertices that direct to a given vertex
+        graph.add_vertex('A')
+        graph.add_vertex('B')
+        graph.add_vertex('C')
+        graph.add_edge('A', 'B')
+        self.assertCountEqual(graph.get_neighbors('A'), ['B'])
+        self.assertCountEqual(graph.get_neighbors('B'), [])
+        graph.add_edge('A', 'C')
+        self.assertCountEqual(graph.get_neighbors('A'), ['B', 'C'])
+        self.assertCountEqual(graph.get_neighbors('C'), [])
+
+
+        # neighbors can return any vertices that direct to a given vertex,
+        # if that vertex directs back as well
+        graph.add_edge('C', 'A')
+        self.assertCountEqual(graph.get_neighbors('C'), ['A'])
+        graph.add_edge('C', 'B')
+        self.assertCountEqual(graph.get_neighbors('C'), ['A', 'B'])
+
+
+        # neighbor should still be added even if vertex is added through add_edge
+        graph.add_edge('A', 'D')
+        self.assertCountEqual(graph.get_neighbors('A'), ['B', 'C', 'D'])  # Item order does not matter
+        self.assertCountEqual(graph.get_neighbors('D'), [])  # Item order does not matter
+
+        # error should be raised when key is not in graph
+        with self.assertRaises(KeyError):
+            graph.get_neighbors('E')  # Vertex does not exist
+        with self.assertRaises(KeyError):
+            graph.get_neighbors('F')  # Vertex does not exist
+
+
+if __name__ == '__main__':
+    unittest.main()

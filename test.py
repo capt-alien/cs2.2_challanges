@@ -5,7 +5,7 @@
 from adjancy import Graph
 import unittest
 
-class GraphTest(unittet.TestCase):
+class GraphTest(unittest.TestCase):
 
     def test_init(self):
         graph = Graph()

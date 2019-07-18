@@ -2,7 +2,7 @@
 
 # code credit: Ansel
 
-from adjancy import Graph
+from adjancy_matrix import Graph
 import unittest
 
 class GraphTest(unittest.TestCase):
@@ -44,11 +44,11 @@ class GraphTest(unittest.TestCase):
             graph.add_vertex('D')  # Vertex already exists
         assert graph.size == 6
 
-    def test_add_vertx(self):
+    def test_add_vertex(self):
         graph = Graph()
 
         #graph should hae a newly added Vertex
-        assert graphsize==0
+        assert graph.size==0
         graph.add_vertex('A')
         assert graph.size == 1
         assert graph.has_vertex('A') is True
@@ -79,6 +79,8 @@ class GraphTest(unittest.TestCase):
         graph.add_vertex('C')
         assert graph.has_vertex('C') is True
         assert graph.size == 3
+
+        print(graph.graph)
 
        # when edge is added with existing vertices, second vertex
        # should be a neighbor of first vertex

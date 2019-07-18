@@ -1,4 +1,4 @@
-#! python3
+#!python3
 # Code Inspired by Ansel's work.
 
 class Graph(object):
@@ -9,15 +9,14 @@ class Graph(object):
         self.name_to_index = {}
         self.index_to_name = {}
         self.graph = []
-        self.size = 0
-        self.edges = 0
         # impliment self.size later
 
     def __repr__(self):
         return "graph({})".format(self.graph)
 
+    @property
     def size(self):
-        return self.size
+        return len(self.graph)
 
     def add_vertex(self, vert):
         """Add a Vertex to the Graph."""
@@ -28,12 +27,12 @@ class Graph(object):
         self.name_to_index[vert] = self.size
         self.index_to_name[self.size] = vert
 
-        #????ask Ansel about this one
         for row in self.graph:
             row.append(0)
 
-        #????ask Ansel what this does.
-        self.graph.append([0 for vertx in range(self.size + 1)])
+        # Because vertex has not been added yet, range should account for
+        # missing vertex with a +1
+        self.graph.append([0 for vertex in range(self.size + 1)])
 
     def add_edge(self, vert_1, vert_2):
         """Adds a direct edge between two
@@ -47,7 +46,10 @@ class Graph(object):
         vert_1_index = self.name_to_index[vert_1]
         vert_2_index = self.name_to_index[vert_2]
 
-        self.graph[vert_1][vert_2]
+        self.graph[vert_1_index][vert_2_index] = 1
+
+        if self.graph[vert_1_index][vert_2_index] != 1:
+            self.graph[vert_1_index][vert_2_index] = -1
 
     def add_weighted_edge(self, vert_1, vert_2, weight):
         """Adds a weighted edge between two
@@ -61,15 +63,15 @@ class Graph(object):
             return False
         return True
 
-    def get_verticies(self):
+    def get_vertices(self):
         """Retunrn the list of all verticies in the graph."""
         return [vertex for vertex in self.name_to_index.keys()]
 
     def get_neighbors(self, vert):
         """Lasts all vertices y such that there is an
             edge from the vert to the vertex y"""
-        if vert not in self.name_to_index[vert]:
-            raise KeyError("this vertex is not in graph")
+        if vert not in self.name_to_index:
+            raise KeyError("{} vertex is not in graph".format(vert))
 
         vert_index = self.name_to_index[vert]
         neighbors = set()

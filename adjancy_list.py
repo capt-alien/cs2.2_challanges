@@ -1,5 +1,6 @@
 #!python3
 # Code Inspired by Ansel's work.
+import sys
 
 class Graph(object):
     """Impliments a graph as a list
@@ -58,3 +59,22 @@ class Graph(object):
         if vert not in self.graph:
             raise KeyError("Vertex {} is not in the graph")
         return self.graph[vert]
+
+
+def graphify_text_file(filename):
+    f=open(filename, "r", encoding="utf8")
+    lines = f.readlines()
+    f.close()
+    #create Graph
+    graph = Graph()
+    #Create Verticies in line 2
+    vertices = lines[1][0:-1].split(',')
+    for x in vertices:
+        graph.add_vertex(x)
+    #Run the rest of the list through a for loop
+
+
+
+
+if __name__ == '__main__':
+    graphify_text_file(sys.argv[1])

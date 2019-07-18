@@ -20,7 +20,7 @@ class Graph(object):
         #check to see if vertex in graph
         if vert in self.graph:
             raise KeyError("{} is already in the Graph".format(vert))
-        self.graph= set()
+        self.graph[vert]= set()
         self.size += 1
 
     def add_edge(self, vert_1, vert_2):

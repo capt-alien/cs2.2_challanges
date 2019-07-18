@@ -2,7 +2,7 @@
 
 # code credit: Ansel
 
-from adjancy_matrix import Graph
+from adjancy_list import Graph
 import unittest
 
 class GraphTest(unittest.TestCase):

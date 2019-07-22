@@ -84,17 +84,21 @@ class Graph(object):
     def get_edges(self):
         """Returns the list of all edges and weights in the graph."""
         edge_list = set()
+
         for vert_1 in self.graph:
             for vert_2 in self.get_neighbors(vert_1):
                 if self.weighted:
                     weight = self.weights[(vert_1, vert_2)]
+
                   # If the graph is directed, as to edge list as normal
                 if self.directed and self.weighted:
                     edge_list.add((vert_1, vert_2, weight))
                 if self.directed and not self.weighted:
                     edge_list.add((vert_1, vert_2))
-            # If the graph is undirected, make sure only one edge between
+
+                            # If the graph is undirected, make sure only one edge between
             # two vertices is counted. My implementation stores a directed
+            # edge from and to both vertices for easier traversals.
                 if not self.directed and self.weighted:
                     if (vert_1, vert_2, weight) not in edge_list:
                         edge_list.add((vert_1, vert_2, weight))
@@ -103,5 +107,5 @@ class Graph(object):
                         edge_list.add((vert_1, vert_2))
         return edge_list
 
-    def breath_first_search(self, from_vert, to_vert):
+    def breath_first_search(self, vert):
         pass

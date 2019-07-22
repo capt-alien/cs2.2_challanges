@@ -32,6 +32,6 @@ def graphify_text_file(filename):
 
 if __name__ == '__main__':
     grapher = graphify_text_file(sys.argv[1])
-    path =grapher.shortest_path(sys.argv[2], sys.argv[3])
-    print("Verticies in shortest path:"+len(path))
-    print("Number of Edges in shortest path:"+len(path))
+    path =grapher.shortest_path(int(sys.argv[2]), int(sys.argv[3]))
+    print("Verticies in shortest path:"+str(path))
+    print("Number of Edges in shortest path:"+str(len(path)))

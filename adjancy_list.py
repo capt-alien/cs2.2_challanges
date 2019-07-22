@@ -38,7 +38,6 @@ class Graph(object):
         # self.graph[vert_2].add(vert_1)
         self.edges += 1
 
-
     def add_weighted_edge(self, vert_1, vert_2, weight=0):
         """Adds a weighted edge between two
             verticies. If no weight given it defaults to a
@@ -103,5 +102,37 @@ class Graph(object):
                         edge_list.add((vert_1, vert_2))
         return edge_list
 
-    def breath_first_search(self, from_vert, to_vert):
-        pass
+    def breath_first_search(self, vert):
+        """returns a list of the breath first search
+            starting at specified verticiy"""
+        #mark all the verts as not visitied
+        visited = set()
+
+        #create a queue
+        queue = []
+        path = []
+
+        #mark first vert as visitied
+        #and enqueue it.
+        queue.append(vert)
+        visited.add(vert)
+
+        while queue:
+            # deque a vertex from queue and print it.
+            visit = int(queue.pop(0))
+            path.append(visit)
+
+            for i in self.graph[visit]:
+                if i not in visited:
+                    queue.append(i)
+                    visited.add(i)
+        return path
+
+    def shortest_path(self, vert_1, vert_2):
+        """Uses BFS to determine shortest path
+            between two verticies returns a list"""
+        list = self.breath_first_search(vert_1)
+        print(list)
+        cut_off = (list.index(vert_2))
+        path = list[0:cut_off]
+        return path

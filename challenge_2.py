@@ -22,20 +22,16 @@ def graphify_text_file(filename):
     #Run the rest of the list through a for loop
     for y in range(2, len(lines)):
         #check len for weighted
-        graph.add_weighted_edge(lines[y][0], lines[y][1], lines[y][2])
+        # graph.add_weighted_edge(lines[y][0], lines[y][1], lines[y][2])
+        graph.add_edge(lines[y][0], lines[y][1])
 
     return graph
 
-def print_graph(graph):
-    print("Number of Verticies:"+str(graph.size))
-    print("Number of Edges:"+str(graph.edges))
-    print("Edge list:")
-    #itterate through vertexes and get edges
-    edges = graph.get_edges()
-    for edge in edges:
-        print(edge)
+
 
 
 if __name__ == '__main__':
     grapher = graphify_text_file(sys.argv[1])
-    print_graph(grapher)
+    path =grapher.shortest_path(sys.argv[2], sys.argv[3])
+    print("Verticies in shortest path:"+len(path))
+    print("Number of Edges in shortest path:"+len(path))

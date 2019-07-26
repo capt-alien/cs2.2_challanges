@@ -2,7 +2,7 @@
 import sys
 from ast import literal_eval as make_tuple
 
-from adjancy_list import Graph
+from graph import Graph
 # from adjancy_matrix import Graph
 
 def graphify_text_file(filename):
@@ -26,9 +26,7 @@ def graphify_text_file(filename):
         graph.add_edge(lines[y][0], lines[y][1])
 
     return graph
-
-
-
+    
 
 if __name__ == '__main__':
     grapher = graphify_text_file(sys.argv[1])

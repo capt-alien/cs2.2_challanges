@@ -102,6 +102,11 @@ class Graph(object):
                         edge_list.add((vert_1, vert_2))
         return edge_list
 
+    def breadth_first_search(self, vertex, n, only_new = True):
+        if vertex not in self.get_vertices:
+            raise ValueError("{} is not in the Graph".format(vertex))
+
+
     def shortest_path(self, vert_1, vert_2):
         """returns a list of the breath first search
             starting at specified verticiy"""

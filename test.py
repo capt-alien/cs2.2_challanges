@@ -191,6 +191,150 @@ class GraphTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             graph.get_neighbors('F')  # Vertex does not exist
 
+    def test_breadth_first_search(self):
+        graph = Graph()
+
+        # Create verties and edges
+        graph.add_edge("A", "B")
+        graph.add_edge("A", "C")
+        graph.add_edge("B", "A")
+        graph.add_edge("B", "E")
+        graph.add_edge("C", "D")
+        graph.add_edge("D", "F")
+        graph.add_edge("E", "H")
+        graph.add_edge("F", "G")
+        graph.add_edge("G", "H")
+        graph.add_edge("H", "I")
+        graph.add_edge("H", "J")
+        graph.add_edge("H", "G")
+        graph.add_edge("J", "B")
+
+        # Get all vertices accessible at level 1
+        level_1 = graph.breadth_first_search(v_a, 1, only_new=False)
+        self.assertCountEqual(level_1, [v_b, v_c])
+        # Get all vertices accessible at level 2
+        level_2 = graph.breadth_first_search(v_a, 2, only_new=False)
+        self.assertCountEqual(level_2, [v_a, v_d, v_e])
+        # Get all vertices accessible at level 3
+        level_3 = graph.breadth_first_search(v_a, 3, only_new=False)
+        self.assertCountEqual(level_3, [v_b, v_c, v_f, v_h])
+        # Get all vertices accessible at level 4
+        level_4 = graph.breadth_first_search(v_a, 4, only_new=False)
+        self.assertCountEqual(level_4, [v_a, v_d, v_e, v_g, v_i, v_j])
+        # Get all vertices accessible at level 5
+        level_5 = graph.breadth_first_search(v_a, 5, only_new=False)
+        self.assertCountEqual(level_5, [v_b, v_c, v_f, v_h])
+
+        # Get new vertices accessible at level 1
+        new_level_1 = graph.breadth_first_search(v_a, 1)
+        self.assertCountEqual(new_level_1, [v_b, v_c])
+        # Get new vertices accessible at level 2
+        new_level_2 = graph.breadth_first_search(v_a, 2)
+        self.assertCountEqual(new_level_2, [v_d, v_e])
+        # Get new vertices accessible at level 3
+        new_level_3 = graph.breadth_first_search(v_a, 3)
+        self.assertCountEqual(new_level_3, [v_f, v_h])
+        # Get new vertices accessible at level 4
+        new_level_4 = graph.breadth_first_search(v_a, 4)
+        self.assertCountEqual(new_level_4, [v_g, v_i, v_j])
+        # No new vertices accessible at level 5
+        new_level_5 = graph.breadth_first_search(v_a, 5)
+        self.assertCountEqual(new_level_5, [])
+
+                # Test starting from vertex "g"
+        # Get all vertices accessible at level 1
+        graph_level_1 = graph.breadth_first_search(v_g, 1, only_new=False)
+        self.assertCountEqual(graph_level_1, [v_h])
+        # Get new vertices accessible at level 2
+        graph_new_level_2 = graph.breadth_first_search(v_g, 2)
+        self.assertCountEqual(graph_new_level_2, [v_i, v_j])
+        # Get all vertices accessible at level 3
+        graph_level_3 = graph.breadth_first_search(v_g, 3, only_new=False)
+        self.assertCountEqual(graph_level_3, [v_b, v_h])
+        # Get new vertices accessible at level 4
+        graph_new_level_4 = graph.breadth_first_search(v_g, 4)
+        self.assertCountEqual(graph_new_level_4, [v_a, v_e])
+        # Get new vertices accessible at level 5
+        graph_new_level_5 = graph.breadth_first_search(v_g, 5)
+        self.assertCountEqual(graph_new_level_5, [v_c])
+        # Get new vertices accessible at level 6
+        graph_new_level_6 = graph.breadth_first_search(v_g, 6)
+        self.assertCountEqual(graph_new_level_6, [v_d])
+        # Get new vertices accessible at level 7
+        graph_new_level_7 = graph.breadth_first_search(v_g, 7)
+        self.assertCountEqual(graph_new_level_7, [v_f])
+        # No new vertices accessible at level 8
+        graph_new_level_8 = graph.breadth_first_search(v_g, 8)
+        self.assertCountEqual(graph_new_level_8, [])
+
+        # Error should be raised if passing key rather than vertex object
+        with self.assertRaises(TypeError):
+            graph.breadth_first_search("A", 1, only_new=False)
+        with self.assertRaises(TypeError):
+            graph.breadth_first_search("G", 2)
+        # Error should be raised when vertex not in graph
+        v_y = Vertex("Y")
+        with self.assertRaises(ValueError):
+            graph.breadth_first_search(v_y, 2, only_new=False)
+        v_z = Vertex("Z")
+        with self.assertRaises(ValueError):
+            graph.breadth_first_search(v_z, 1)
+
+    def test_find_shortest_path(self):
+        graph = Graph()
+
+        # Create verties and edges
+        graph.add_edge("A", "B")
+        graph.add_edge("A", "C")
+        graph.add_edge("B", "A")
+        graph.add_edge("B", "E")
+        graph.add_edge("C", "D")
+        graph.add_edge("D", "F")
+        graph.add_edge("E", "H")
+        graph.add_edge("F", "G")
+        graph.add_edge("G", "H")
+        graph.add_edge("H", "I")
+        graph.add_edge("H", "J")
+        graph.add_edge("H", "G")
+        graph.add_edge("J", "B")
+        # Add vertices that cannot be reached by other vertices
+        graph.add_vertex('X')
+        graph.add_edge("Y", "Z")
+
+        # Find shortest path 2 edges away
+        path_2 = graph.find_shortest_path("A", "E")
+        self.assertEqual(path_2, [v_a, v_b, v_e])  # Order matters
+        # Find shortest path 4 edges away
+        path_4 = graph.find_shortest_path("A", "I")
+        self.assertEqual(path_4, [v_a, v_b, v_e, v_h, v_i])  # Order matters
+        # Find shortest path 7 edges away
+        path_7 = graph.find_shortest_path("G", "F")
+        true_path_7 = [v_g, v_h, v_j, v_b, v_a, v_c, v_d, v_f]  # Order matters
+        self.assertEqual(path_7, true_path_7)
+
+        # There is no shortest path between unconnected vertices in same graph
+        no_path_1 = graph.find_shortest_path("G", "X")
+        self.assertEqual(no_path_1, None)
+        no_path_2 = graph.find_shortest_path("X", "Z")
+        self.assertEqual(no_path_2, None)
+        # There is no way to traverse to the same vertex
+        same_vert_path = graph.find_shortest_path("A", "A")
+        self.assertEqual(same_vert_path, None)
+
+        # No path to vertex that does not have an edge directed into it
+        graph.directed = True
+        # Added directed edge from 0 to A
+        graph.add_edge(0, "A")
+        # Try to get 0 from A
+        no_directed_path = graph.find_shortest_path("A", 0)
+        self.assertEqual(no_directed_path, None)
+
+        # Error should be raised when vertex not in graph
+        with self.assertRaises(KeyError):
+            graph.find_shortest_path("A", 1)
+        with self.assertRaises(KeyError):
+            graph.find_shortest_path("T", "A")
+
 
 if __name__ == '__main__':
     unittest.main()

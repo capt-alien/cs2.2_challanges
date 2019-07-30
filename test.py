@@ -2,7 +2,7 @@
 
 # code credit: Ansel
 
-from adjancy_list import Graph
+from graph import Graph
 import unittest
 
 class GraphTest(unittest.TestCase):
@@ -280,7 +280,7 @@ class GraphTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             graph.breadth_first_search(v_z, 1)
 
-    def test_find_shortest_path(self):
+    def test_shortest_path(self):
         graph = Graph()
 
         # Create verties and edges
@@ -302,23 +302,23 @@ class GraphTest(unittest.TestCase):
         graph.add_edge("Y", "Z")
 
         # Find shortest path 2 edges away
-        path_2 = graph.find_shortest_path("A", "E")
+        path_2 = graph.shortest_path("A", "E")
         self.assertEqual(path_2, [v_a, v_b, v_e])  # Order matters
         # Find shortest path 4 edges away
-        path_4 = graph.find_shortest_path("A", "I")
+        path_4 = graph.shortest_path("A", "I")
         self.assertEqual(path_4, [v_a, v_b, v_e, v_h, v_i])  # Order matters
         # Find shortest path 7 edges away
-        path_7 = graph.find_shortest_path("G", "F")
+        path_7 = graph.shortest_path("G", "F")
         true_path_7 = [v_g, v_h, v_j, v_b, v_a, v_c, v_d, v_f]  # Order matters
         self.assertEqual(path_7, true_path_7)
 
         # There is no shortest path between unconnected vertices in same graph
-        no_path_1 = graph.find_shortest_path("G", "X")
+        no_path_1 = graph.shortest_path("G", "X")
         self.assertEqual(no_path_1, None)
-        no_path_2 = graph.find_shortest_path("X", "Z")
+        no_path_2 = graph.shortest_path("X", "Z")
         self.assertEqual(no_path_2, None)
         # There is no way to traverse to the same vertex
-        same_vert_path = graph.find_shortest_path("A", "A")
+        same_vert_path = graph.shortest_path("A", "A")
         self.assertEqual(same_vert_path, None)
 
         # No path to vertex that does not have an edge directed into it
@@ -326,14 +326,14 @@ class GraphTest(unittest.TestCase):
         # Added directed edge from 0 to A
         graph.add_edge(0, "A")
         # Try to get 0 from A
-        no_directed_path = graph.find_shortest_path("A", 0)
+        no_directed_path = graph.shortest_path("A", 0)
         self.assertEqual(no_directed_path, None)
 
         # Error should be raised when vertex not in graph
         with self.assertRaises(KeyError):
-            graph.find_shortest_path("A", 1)
+            graph.shortest_path("A", 1)
         with self.assertRaises(KeyError):
-            graph.find_shortest_path("T", "A")
+            graph.shortest_path("T", "A")
 
 
 if __name__ == '__main__':

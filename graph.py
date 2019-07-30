@@ -102,9 +102,35 @@ class Graph(object):
                         edge_list.add((vert_1, vert_2))
         return edge_list
 
-    def breadth_first_search(self, vertex, n, only_new = True):
+    def breadth_first_search(self, vertex):
+        """Returns a list of visited BFS"""
+        #revisit and refactor
         if vertex not in self.get_vertices:
             raise ValueError("{} is not in the Graph".format(vertex))
+        #mark all the verts as not visitied
+        visited = set()
+
+        #create a queue
+        queue = []
+        path = []
+        parents = {}
+
+        #mark first vert as visitied
+        #and enqueue it.
+        queue.append(vert_1)
+        visited.add(vert_1)
+
+        while queue:
+            # deque a vertex from queue and print it.
+            visit = int(queue.pop(0))
+            # path.append(visit)
+
+            for i in self.graph[visit]:
+                if i not in visited:
+                    queue.append(i)
+                    visited.add(i)
+
+        return path
 
 
     def shortest_path(self, vert_1, vert_2):
